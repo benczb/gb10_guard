@@ -1,0 +1,17 @@
+[Unit]
+Description=GX10 Health Monitor
+After=network.target
+Documentation=https://github.com/benczb/asus-gx10-monitor
+
+[Service]
+Type=simple
+User=benjamin
+ExecStart=/usr/local/bin/monitor_gx10.sh
+Restart=always
+RestartSec=5
+Environment=TZ=Asia/Singapore
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

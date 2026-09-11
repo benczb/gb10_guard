@@ -22,16 +22,11 @@ Two things live here:
    GPU-heavy workloads when the box gets too hot and resumes them when it
    cools down.
 
-## Thermal report
+## Temperature monitor
 
-Static report of the local GX10 monitor logs from **2026-05-25** through
-**2026-09-12**.
-
-- Highest CPU: **98°C** at `2026-08-16 21:05:50`
-- Highest GPU: **90°C** at `2026-07-20 14:04:52`
-- Records reviewed: **896,626** (5704 malformed lines excluded)
-
-Open `index.html` locally or publish with GitHub Pages.
+The live monitor service and script are versioned here as `monitor_gx10.sh` and
+`gx10-monitor.service`. The data dashboard has been moved to the dedicated
+[asus-gx10-monitor](https://github.com/benczb/asus-gx10-monitor) repository.
 
 ## GPU guard package
 
