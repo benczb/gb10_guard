@@ -28,6 +28,18 @@ The live monitor service and script are versioned here as `monitor_gx10.sh` and
 `gx10-monitor.service`. The data dashboard has been moved to the dedicated
 [asus-gx10-monitor](https://github.com/benczb/asus-gx10-monitor) repository.
 
+Install or update the monitor service:
+
+```bash
+sudo install -m 0755 monitor_gx10.sh /usr/local/bin/monitor_gx10.sh
+sudo install -m 0644 gx10-monitor.service /etc/systemd/system/gx10-monitor.service
+sudo systemctl daemon-reload
+sudo systemctl enable --now gx10-monitor.service
+```
+
+The service emits only `HOT` events to journald; the full 10-second time series
+continues in `/home/benjamin/backups/logs/cpustats/`.
+
 ## GPU guard package
 
 System-wide thermal pacing for the whole box, covering every local AI
