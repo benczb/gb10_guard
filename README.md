@@ -9,6 +9,17 @@ GPU load - built because months of local AI work (hermes gateways,
 sglang/vllm/llama servers, comfy-worker, all in docker) pushed the box to
 98C CPU / 90C GPU peaks, and nothing was pacing the heat.
 
+The log behind all this: **896,626 samples** (5,704 malformed rows
+excluded), one every **10 seconds** from 2026-05-25 to 2026-09-12. Each row
+is CPU temp, GPU temp, RAM used/available and an OK/HOT flag, appended to a
+daily CSV. Peaks: **98C CPU** (2026-08-16 21:05:50) and **90C GPU**
+(2026-07-20 14:04:52).
+
+Why I do this: the GB10 chip has no standard power-limit control, and
+sustained local AI load pushed the box into overheating, throttling and
+hard power losses. The log is the proof of what the box actually does under
+load; the guard is what protects the hardware from it.
+
 If you run local AI workloads on a GB10 machine and want to reduce heat
 wear and tear, the guard package is for you.
 
