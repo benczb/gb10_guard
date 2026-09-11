@@ -28,10 +28,7 @@ wear and tear, the guard package is for you.
 Two things live here:
 
 1. **A temperature monitor** (`monitor_gb10.sh` + `gb10-monitor.service`) -
-   logs CPU temp, GPU temp and RAM every 10 seconds to a daily CSV. The data
-   dashboard with the historical charts and peak readings lives in the
-   dedicated [asus-gx10-monitor](https://github.com/benczb/asus-gx10-monitor)
-   repository.
+   logs CPU temp, GPU temp and RAM every 10 seconds to a daily CSV.
 2. **A GPU guard package** - system-wide thermal pacing that pauses
    GPU-heavy workloads when the box gets too hot and resumes them when it
    cools down.
