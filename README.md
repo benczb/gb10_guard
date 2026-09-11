@@ -36,8 +36,7 @@ Two things live here:
 ## Temperature monitor
 
 The live monitor service and script are versioned here as `monitor_gb10.sh` and
-`gb10-monitor.service`. The data dashboard has been moved to the dedicated
-[asus-gx10-monitor](https://github.com/benczb/asus-gx10-monitor) repository.
+`gb10-monitor.service`.
 
 Install or update the monitor service:
 
