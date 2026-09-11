@@ -39,8 +39,74 @@ sudo systemctl daemon-reload
 sudo systemctl enable --now gpu-guard
 ```
 
-Dry-run first if you want to watch decisions without pausing anything:
-add `GUARD_DRY_RUN=1` to /etc/default/gpu-guard, restart, watch the log.
+## Dry-run testing (block two)
+
+Use dry-run mode before enabling active protection. The guard will read the
+real GPU temperature and report the containers it would pause, but it will not
+pause containers or stop user services.
+
+Install the guard and create a dry-run configuration:
+
+```bash
+cd ~/gb10_guard
+sudo install -m 0755 gpu-guard.sh /usr/local/bin/gpu-guard.sh
+sudo install -m 0644 gpu-guard.service /etc/systemd/system/gpu-guard.service
+sudo tee /etc/default/gpu-guard >/dev/null <<'EOF'
+GUARD_HOLD_TEMP_C=82
+GUARD_RESUME_TEMP_C=74
+GUARD_POLL_SEC=20
+GUARD_MIN_HOLD_SEC=60
+GUARD_RESUME_STABLE_SEC=120
+GUARD_WHITELIST=
+GUARD_USER_SERVICES=
+GUARD_DRY_RUN=1
+EOF
+sudo systemctl daemon-reload
+sudo systemctl enable --now gpu-guard.service
+```
+
+Watch the guard without affecting workloads:
+
+```bash
+journalctl -u gpu-guard.service -f
+```
+
+To exercise the hold path without heating the machine, temporarily set the
+hold threshold below the current GPU temperature. For example, if the GPU is
+currently 75C:
+
+```bash
+sudo sed -i 's/^GUARD_HOLD_TEMP_C=.*/GUARD_HOLD_TEMP_C=74/' /etc/default/gpu-guard
+sudo systemctl restart gpu-guard.service
+journalctl -u gpu-guard.service -f
+```
+
+You should see a `HOLD` message followed by `[dry-run] would pause container:`
+messages. Confirm that workloads remain usable with `docker ps` and that no
+container is paused:
+
+```bash
+docker ps --filter status=paused
+```
+
+Restore the normal thresholds after the test:
+
+```bash
+sudo sed -i 's/^GUARD_HOLD_TEMP_C=.*/GUARD_HOLD_TEMP_C=82/' /etc/default/gpu-guard
+sudo systemctl restart gpu-guard.service
+```
+
+Keep `GUARD_DRY_RUN=1` until you have reviewed the proposed container list.
+To enable active protection later, set it to `0`, configure a deliberate
+`GUARD_WHITELIST`, and restart the service:
+
+```bash
+sudo sed -i 's/^GUARD_DRY_RUN=1/GUARD_DRY_RUN=0/' /etc/default/gpu-guard
+sudo systemctl restart gpu-guard.service
+```
+
+Do not use an empty whitelist in active mode unless you intentionally want
+all running Docker containers to be eligible for pausing.
 
 ## Config knobs
 
