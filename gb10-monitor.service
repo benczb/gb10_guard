@@ -1,12 +1,12 @@
 [Unit]
-Description=GX10 Health Monitor
+Description=GB10 Health Monitor
 After=network.target
 Documentation=https://github.com/benczb/asus-gx10-monitor
 
 [Service]
 Type=simple
 User=benjamin
-ExecStart=/usr/local/bin/monitor_gx10.sh
+ExecStart=/usr/local/bin/monitor_gb10.sh
 Restart=always
 RestartSec=5
 Environment=TZ=Asia/Singapore

@@ -27,25 +27,37 @@ wear and tear, the guard package is for you.
 
 Two things live here:
 
-1. **A thermal report** (`index.html`) - what temperatures the box actually
-   hit over several months of local AI work.
+1. **A temperature monitor** (`monitor_gb10.sh` + `gb10-monitor.service`) -
+   logs CPU temp, GPU temp and RAM every 10 seconds to a daily CSV. The data
+   dashboard with the historical charts and peak readings lives in the
+   dedicated [asus-gx10-monitor](https://github.com/benczb/asus-gx10-monitor)
+   repository.
 2. **A GPU guard package** - system-wide thermal pacing that pauses
    GPU-heavy workloads when the box gets too hot and resumes them when it
    cools down.
 
 ## Temperature monitor
 
-The live monitor service and script are versioned here as `monitor_gx10.sh` and
-`gx10-monitor.service`. The data dashboard has been moved to the dedicated
+The live monitor service and script are versioned here as `monitor_gb10.sh` and
+`gb10-monitor.service`. The data dashboard has been moved to the dedicated
 [asus-gx10-monitor](https://github.com/benczb/asus-gx10-monitor) repository.
 
 Install or update the monitor service:
 
 ```bash
-sudo install -m 0755 monitor_gx10.sh /usr/local/bin/monitor_gx10.sh
-sudo install -m 0644 gx10-monitor.service /etc/systemd/system/gx10-monitor.service
+sudo install -m 0755 monitor_gb10.sh /usr/local/bin/monitor_gb10.sh
+sudo install -m 0644 gb10-monitor.service /etc/systemd/system/gb10-monitor.service
 sudo systemctl daemon-reload
-sudo systemctl enable --now gx10-monitor.service
+sudo systemctl enable --now gb10-monitor.service
+```
+
+These files were renamed from `monitor_gx10.sh` / `gx10-monitor.service` to
+the gb10 naming. If you installed the old ones, disable and remove them
+before installing the renamed service:
+
+```bash
+sudo systemctl disable --now gx10-monitor.service
+sudo rm /etc/systemd/system/gx10-monitor.service /usr/local/bin/monitor_gx10.sh
 ```
 
 The service emits only `HOT` events to journald; the full 10-second time series
