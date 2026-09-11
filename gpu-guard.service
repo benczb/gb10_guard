@@ -1,0 +1,14 @@
+[Unit]
+Description=GX10 GPU thermal guard (pause GPU-heavy workloads above hold temp)
+After=nvidia-persistenced.service docker.service
+Wants=nvidia-persistenced.service docker.service
+
+[Service]
+Type=simple
+EnvironmentFile=-/etc/default/gpu-guard
+ExecStart=/usr/local/bin/gpu-guard.sh
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
